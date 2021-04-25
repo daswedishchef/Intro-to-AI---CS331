@@ -1,0 +1,24 @@
+--Method bfs
+   Nodes explored: 11751Nodes in path: 12
+Action: [1, 1]
+Boat: 1    Chickens: 1    Wolves: 1
+Action: [1, 0]
+Boat: 0    Chickens: 0    Wolves: 1
+Action: [0, 2]
+Boat: 1    Chickens: 0    Wolves: 3
+Action: [0, 1]
+Boat: 0    Chickens: 0    Wolves: 2
+Action: [2, 0]
+Boat: 1    Chickens: 2    Wolves: 2
+Action: [1, 1]
+Boat: 0    Chickens: 1    Wolves: 1
+Action: [2, 0]
+Boat: 1    Chickens: 3    Wolves: 1
+Action: [0, 1]
+Boat: 0    Chickens: 3    Wolves: 0
+Action: [0, 2]
+Boat: 1    Chickens: 3    Wolves: 2
+Action: [1, 0]
+Boat: 0    Chickens: 2    Wolves: 2
+Action: [1, 1]
+Boat: 1    Chickens: 3    Wolves: 3
