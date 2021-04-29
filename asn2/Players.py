@@ -16,7 +16,6 @@ class Player:
     
     def get_actions(self, board, symbol):
         actions = list()
-        print(symbol)
         for col in range(4):
             for row in range(4):
                 if(board.is_legal_move(col, row, symbol)):
@@ -38,12 +37,16 @@ class Player:
     def get_move(self, board):
         #get available actions and successor states
         rs = list()
+        #find successor states of bot actions
         a = self.get_actions(board, self.symbol)
         for ch in a:
             s = list()
             tb = board.cloneOBoard()
             tb.play_move(ch[0], ch[1], self.symbol)
-            sa = self.get_actions(board, board.p1_symbol)
+            if not tb.has_legal_moves_remaining(tb.p1_symbol):
+                return ch
+            #find successor states of p1 actions for each bot successor
+            sa = self.get_actions(tb, board.p1_symbol)
             for act in sa:
                 ts = board.cloneOBoard()
                 ts.play_move(act[0], act[1], board.p1_symbol)
