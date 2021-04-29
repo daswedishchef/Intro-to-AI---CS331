@@ -43,6 +43,7 @@ class Player:
             s = list()
             tb = board.cloneOBoard()
             tb.play_move(ch[0], ch[1], self.symbol)
+            #if terminal, return action
             if not tb.has_legal_moves_remaining(tb.p1_symbol):
                 return ch
             #find successor states of p1 actions for each bot successor
