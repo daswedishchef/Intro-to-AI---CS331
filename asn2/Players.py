@@ -13,7 +13,8 @@ class Player:
     #PYTHON: use obj.symbol instead
     def get_symbol(self):
         return self.symbol
-    
+
+    #get possible actions
     def get_actions(self, board, symbol):
         actions = list()
         for col in range(4):
@@ -22,40 +23,54 @@ class Player:
                     actions.append((col, row))
         return actions
 
-    #parent get_move should not be called
-    # def get_move(self, board):
-    #     #get available actions and successor states
-    #     s = list()
-    #     a = self.get_actions(board, self.symbol)
-    #     for ch in a:
-    #         tb = board.cloneOBoard()
-    #         tb.play_move(ch[0], ch[1], self.symbol)
-    #         s.append(tb.count_score(self.symbol))
-    #     r = np.argmin(s)
-    #     return a[r]
-            
+    #utility functions
+    def get_score(self, board):
+        s = board.count_score('O') - board.count_score('X')
+        return s
+    
+    def has_won(self, board):
+        s = board.count_score('O') + board.count_score('X')
+        return s == 16 and self.get_score(board) > 0
+
+    #successor function
+    def get_succ(self, board, symbol, depth = 0):
+        scores = dict()
+        actions = self.get_actions(board, symbol)
+        if len(actions) == 0:
+            tsc = self.get_score(board)
+            if not board.has_legal_moves_remaining(board.p1_symbol) or self.has_won(board):
+                tsc += 100
+            if not board.has_legal_moves_remaining(board.p2_symbol):
+                tsc -= 100
+            return tsc
+        for a in actions:
+            tb = board.cloneOBoard()
+            tb.play_move(a[0],a[1],symbol)
+            score = self.get_score(tb)
+            if symbol == 'X':
+                res = self.get_succ(tb, 'O', depth + 1)
+            else:
+                res = self.get_succ(tb, 'X', depth + 1)
+            if type(res) == int:
+                s_score = res
+            else:
+                s_score = 0
+                for k in res:
+                    s_score += res[k][0]
+            scores[(a,symbol)] = (s_score + score, res)
+        return scores
+
+    #minimax function
     def get_move(self, board):
         #get available actions and successor states
-        rs = list()
-        #find successor states of bot actions
-        a = self.get_actions(board, self.symbol)
-        for ch in a:
-            s = list()
-            tb = board.cloneOBoard()
-            tb.play_move(ch[0], ch[1], self.symbol)
-            #if terminal, return action
-            if not tb.has_legal_moves_remaining(tb.p1_symbol):
-                return ch
-            #find successor states of p1 actions for each bot successor
-            sa = self.get_actions(tb, board.p1_symbol)
-            for act in sa:
-                ts = board.cloneOBoard()
-                ts.play_move(act[0], act[1], board.p1_symbol)
-                s.append(ts.count_score(board.p1_symbol))
-            rs.append(s[np.argmax(s)])
-        r = np.argmin(rs)
-        return a[r]
-           
+        rs = self.get_succ(board, self.symbol)
+        scores = -100000000000000000000
+        for state in rs:
+            if(scores < rs[state][0]):
+                scores = rs[state][0]
+                move = state[0]
+        return move
+
 
 class HumanPlayer(Player):
     def __init__(self, symbol):
