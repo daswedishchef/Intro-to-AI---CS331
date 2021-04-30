@@ -52,7 +52,7 @@ class Player:
                 ts = board.cloneOBoard()
                 ts.play_move(act[0], act[1], board.p1_symbol)
                 s.append(ts.count_score(board.p1_symbol))
-            rs.append(np.argmax(s))
+            rs.append(s[np.argmax(s)])
         r = np.argmin(rs)
         return a[r]
            
