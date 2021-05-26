@@ -1,17 +1,17 @@
 import numpy as np
 
+junk = ("'", ",", ".", "!", "?", "(", ")", "-", "\n")
+
 def strip(testName, trainName):
     test = open(testName, 'r')
     line = test.readline()
     testD = list()
     test_vocab = list()
+    testLabel = list()
     print("Testing")
     while line:
-        line = line.replace("'", "")
-        line = line.replace(",", "")
-        line = line.replace(".", "")
-        line = line.replace("!", "")
-        line = line.replace("?", "")
+        for j in junk:
+            line = line.replace(j, "")
         testD.append(line)
         sem = line.split()
         for word in sem:
@@ -25,11 +25,8 @@ def strip(testName, trainName):
     train_vocab = list()
     print("Training")
     while line:
-        line = line.replace("'", "")
-        line = line.replace(",", "")
-        line = line.replace(".", "")
-        line = line.replace("!", "")
-        line = line.replace("?", "")
+        for j in junk:
+            line = line.replace(j, "")
         trainD.append(line)
         sem = line.split()
         for word in sem:
@@ -37,12 +34,12 @@ def strip(testName, trainName):
                 train_vocab.append(word)
         line = train.readline()
     train.close()
-    return test_vocab, train_vocab
+
+    return testD, trainD, test_vocab, train_vocab
 
 
 def main():
-    vocab = strip('testSet.txt', 'trainingSet.txt')
-    print("test", vocab[0])
-    print("train", vocab[1])
+    prepro = strip('testSet.txt', 'trainingSet.txt')
+
 
 main()
